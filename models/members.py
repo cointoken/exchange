@@ -23,10 +23,16 @@ class Members(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(100),nullable=False,unique=True)
     pwd = db.Column(db.String(255),nullable=False)
-    actived = db.Column(db.Integer(1),)
+    activated = db.Column(db.Boolean)
+    country_code = db.Column(db.Integer(11))
+    phone_number = db.Column(db.String(255))
+    disable = db.Column(db.Boolean)
+    nickname = db.Column(db.String(255))
+    invited_code =  db.Column(db.String(20))
     #Foreignkey('')
     #relationship('')
-    createTime = db.Column(db.DateTime,onupdate=datetime.now) 
+    created_at = db.Column(db.DateTime,onupdate=datetime.now) 
+    updated_at = db.Column(db.DateTime,onupdate=datetime.now)
     
     def _repr__(self):
         pass
