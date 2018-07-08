@@ -1,21 +1,7 @@
 """
-This requires the following Python libraries to be installed: 
-* Flask
-* Flask-SQLALchemy
-* Flask-Restless
-* Flask-Login
-* pymysql
+注册会员表
 """
-
-from flask import Flask
-from  flask_sqlalchemy import SQLAlchemy
-from  flask_restless import APIManager 
-
-app = Flask(__name__)
-app.config['DEBUG'] = True
-# python3.6以上使用pymysql 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:123456@localhost:3306/exchange'
-db =  SQLAlchemy(app)
+from passlib.apps import custom_app_context 
 
 
 class Members(db.Model):
@@ -38,26 +24,14 @@ class Members(db.Model):
         pass
 
 
-"""
-cros  xss 允许跨域
-"""
-def add_cors_headers(response):
-    response.headers['Access-Control-Allow-Origin'] = 'example.com'
-    response.headers['Access-Control-Allow-Credentials'] = 'true'
-    # Set whatever other headers you like...
-    return response
+    def encrypt_password(self, pwd):
+        self.pwd = custom_app_context.encrypt(pwd)
 
 
-if __name__=='__main__':
-    db.create_all()
-    manager = APIManager(app,flask_sqlalchemy_db=db)
-    #primary_key  设置主键名字
-    #methods 
-    #collection_name 
-    #url_prefix 
-    #include_columns 包含列
-    manager.create_api(User,methods = ['GET','POST','DELETE','PATCH'],collection_name='session',url_prefix='/api/v2')
-    manager.after_request(add_cors_headers)
-
-    app.run(port=8888)
-
+    def verify_password(self,pwd):
+        return custom_app_context.verify(pwd,self.pwd)
+    
+    def set_invited_code(self):
+        self.invited_code = 1000000+self.id
+    
+    

@@ -17,4 +17,6 @@ class Deposits(db.Model):
     updated_at = db.Column(db.DateTime,onupdate=datetune.now)
     done_at = db.Column(db.DateTime)
     confirmations = db.Column(db.String(255))
-    
+    type = db.Column(db.String(255))
+    payment_transaction_id = db.Column(db.Integer(11))
+    txout = db.Column(db.Integer(11))
